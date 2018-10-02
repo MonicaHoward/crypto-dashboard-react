@@ -24,13 +24,46 @@ const Bar = styled.div`
 const Content = styled.div`
 `
 
+const checkFirstVisit = () => {
+  let cryptoDashboardData = localStorage.getItem('cryptoDData');
+  if(!cryptoDashboardData) {
+    return {
+      firstVisit: true,
+      page: 'settings'
+    }
+  }
+  return {};
+}
+
 class App extends Component {
   state = {
-    page: 'dashboard'
+    page: 'dashboard',
+    ...checkFirstVisit()
   }
   showingDashboard = () =>  this.state.page  === 'dashboard';
   showingSettings = () =>  this.state.page  === 'settings';
-
+  firstVisitMessage = () => {
+    if(this.state.firstVisit){
+      return<div>Welcome to your Crypto Dashboard. Please select your favorite coins to begin.</div>
+    }
+  }
+  confirmFavorites = () => {
+    localStorage.setItem('cryptoDData', 'test');
+      this.setState({
+        firstVisit: false,
+        page: 'dashboard'
+      })
+  }
+  settingsContent = () => {
+    return(
+      <div>
+        {this.firstVisitMessage()}
+        <div onClick={this.confirmFavorites}>
+        Confirm Favorites
+        </div>
+      </div>
+    )
+  }
   render() {
     return (
       <AppLayout>
@@ -40,15 +73,18 @@ class App extends Component {
           </Logo>
           <div>
           </div>
-          <ControlButton onClick={()=>{this.setState({page: 'dashboard'})}} active = {this.showingDashboard()} >
-            Dashboard
-          </ControlButton>
+          {!this.state.firstVisit &&(
+            <ControlButton onClick={()=>{this.setState({page: 'dashboard'})}} active = {this.showingDashboard()} >
+              Dashboard
+            </ControlButton>
+          )}
           <ControlButton onClick={()=>{this.setState({page: 'settings'})}} active = {this.showingSettings()}>
             Settings
           </ControlButton>
         </Bar>
         <Content>
-          Hello, I'm { this.state.page }
+          { this.showingSettings() && this.settingsContent() }
+         
         </Content>
       </AppLayout>
     );
