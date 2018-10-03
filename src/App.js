@@ -3,6 +3,8 @@ import styled, {css} from 'styled-components';
 import './App.css';
 import AppBar from './AppBar';
 
+const cc = require('cryptocompare');
+
 const AppLayout = styled.div`
   padding: 40px;
 `
@@ -23,7 +25,7 @@ const checkFirstVisit = () => {
 
 class App extends Component {
   state = {
-    page: 'dashboard',
+    page: 'settings',
     ...checkFirstVisit()
   }
 
@@ -31,8 +33,10 @@ class App extends Component {
     this.fetchCoins();
   }
 
-  fetchCoins = () => {
-    console.log('Fetching coins...');
+  fetchCoins = async () => {
+    let coinList = (await cc.coinList()).Data;
+    this.setState({coinList});
+
   }
   showingDashboard = () =>  this.state.page  === 'dashboard';
   showingSettings = () =>  this.state.page  === 'settings';
@@ -62,9 +66,7 @@ class App extends Component {
   loadingContent = () => {
     if(!this.state.coinList) {
       return (
-        <div>
-          Loading Coins
-        </div>
+        <div>Loading Coins</div>
       )
     }
   }

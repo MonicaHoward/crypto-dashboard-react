@@ -24,7 +24,7 @@ export default function() {
           </Logo>
           <div>
           </div>
-          {!this.state.firstVisit &&(
+          {!this.state.firstVisit && ( 
             <ControlButton onClick={()=>{this.setState({page: 'dashboard'})}} active = {this.showingDashboard()} >
               Dashboard
             </ControlButton>
