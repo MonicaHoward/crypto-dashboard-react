@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {backgroundColor2, fontSize2} from './Style';
 import {WhiteText} from './Text';
+
 const SearchContainer = styled.div`
     margin-top: 40px;
     display: grid;
