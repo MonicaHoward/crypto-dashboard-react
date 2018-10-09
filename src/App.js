@@ -6,6 +6,7 @@ import AppBar from './AppBar';
 import CoinList from './CoinList';
 import Search from './Search';
 import {ConfirmButton} from './Button';
+import fuzzy from 'fuzzy';
 
 const cc = require('cryptocompare');
 
@@ -106,7 +107,26 @@ class App extends Component {
 
   }
 
-  isInFavorites = (key) => _.includes(this.state.favorites, key)
+  isInFavorites = (key) => _.includes(this.state.favorites, key);
+
+  handleFilter = (inputValue) => {
+    let coinSymbols = Object.keys(this.state.coinList);
+    let coinNames = coinSymbols.map(sym => this.state.coinList[sym].CoinName);
+    let allStringsToSearch = coinSymbols.concat(coinNames);
+    let fuzzyResults = fuzzy.filter(inputValue, allStringsToSearch, {}).map(result => result.string);
+    let filteredCoins = _.pickBy(this.state.coinList, (result, symKey) => {
+      let coinName = result.CoinName;
+      return _.includes(fuzzyResults, symKey) || _.includes(fuzzyResults, coinName);
+    });
+    this.setState({filteredCoins})
+  }
+
+  
+
+  filterCoins = (e) => {
+    let inputValue = _.get(e, 'target.value');
+    this.handleFilter(inputValue);
+  }
 
   render() {
     return (

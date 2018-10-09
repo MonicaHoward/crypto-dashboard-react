@@ -9,7 +9,7 @@ const SearchContainer = styled.div`
     grid-gap: 200px;
 `
 const SearchInput = styled.input`
-    color; #1163c9;
+    color: #1163c9;
     border: 1px solid;
     height: 25px;
     margin: 4px;
@@ -22,7 +22,7 @@ export default function() {
     return(
         <SearchContainer>
             <WhiteText> Search All Coins </WhiteText>
-            <SearchInput />
+            <SearchInput onKeyUp={this.filterCoins}/>
         </SearchContainer>
     )
 }
